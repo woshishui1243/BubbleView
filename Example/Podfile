@@ -1,0 +1,11 @@
+use_frameworks!
+
+target 'BubbleView_Example' do
+  pod 'BubbleView', :path => '../'
+
+  target 'BubbleView_Tests' do
+    inherit! :search_paths
+
+    
+  end
+end
