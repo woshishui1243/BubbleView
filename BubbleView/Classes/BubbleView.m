@@ -10,6 +10,8 @@
 
 @interface BubbleView ()
 
+@property (nonatomic, strong) UILabel *contentLabel;
+
 @end
 
 @implementation BubbleView
@@ -17,8 +19,49 @@
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
         self.backgroundColor = [UIColor clearColor];
+        self.contentLabel = [[UILabel alloc] initWithFrame:(CGRect){{0, 0}, frame.size}];
+        
     }
     return self;
+}
+
+- (void)showOverView:(UIView *)coveredView animation:(BOOL)animation {
+    [self showOverView:coveredView];
+    if (!animation) { return; }
+    // 设定为缩放
+    CABasicAnimation *basicAnimation = [CABasicAnimation animationWithKeyPath:@"transform.scale"];
+    
+    // 动画选项设定
+    basicAnimation.duration = 0.25; // 动画持续时间
+    basicAnimation.repeatCount = 1; // 重复次数
+    basicAnimation.autoreverses = NO; // 动画结束时执行逆动画
+    // 缩放倍数
+    basicAnimation.fromValue = [NSNumber numberWithFloat:0.1]; // 开始时的倍率
+    basicAnimation.toValue = [NSNumber numberWithFloat:1]; // 结束时的倍率
+    // 添加动画
+    [self.layer addAnimation:basicAnimation forKey:@"scale-layer"];
+}
+
+- (void)showOverView:(UIView *)coveredView {
+    [coveredView addSubview:self];
+}
+
+- (void)dismissAnimation:(BOOL)animation {
+    if (!animation) {  return;  }
+    CABasicAnimation *basicAnimation = [CABasicAnimation animationWithKeyPath:@"transform.scale"];
+    basicAnimation.duration = 0.25;
+    basicAnimation.repeatCount = 1;
+    basicAnimation.autoreverses = NO;
+    basicAnimation.fromValue = [NSNumber numberWithFloat:1]; // 开始时的倍率
+    basicAnimation.toValue = [NSNumber numberWithFloat:0]; // 结束时的倍率
+    [self.layer addAnimation:basicAnimation forKey:@"scale-layer"];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.25 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self dismiss];
+    });
+}
+
+- (void)dismiss {
+    [self removeFromSuperview];
 }
 
 #pragma mark - draw rect

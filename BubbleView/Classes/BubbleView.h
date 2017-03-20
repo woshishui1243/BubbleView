@@ -24,4 +24,11 @@ typedef enum : NSUInteger {
 @property (nonatomic, assign) BubbleArrorDirection direction;
 @property (nonatomic, assign) CGFloat arrowPosition;
 
+- (void)showOverView:(UIView *)coveredView animation:(BOOL)animation;
+
+- (void)showOverView:(UIView *)coveredView;
+
+- (void)dismiss;
+
+- (void)dismissAnimation:(BOOL)animation;
 @end
