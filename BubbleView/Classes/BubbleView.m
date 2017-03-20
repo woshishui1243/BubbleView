@@ -8,18 +8,42 @@
 
 #import "BubbleView.h"
 
-@interface BubbleView ()
+typedef void(^CallBack)();
 
-@property (nonatomic, strong) UILabel *contentLabel;
+@interface AnimationDelegate : NSObject
+
+@property (nonatomic, copy) CallBack callBack;
+
+@end
+
+@implementation AnimationDelegate
+
+#pragma mark - CAAnimationDelegate
+
+- (void)animationDidStop:(CAAnimation *)anim finished:(BOOL)flag {
+    if (self.callBack) {
+        self.callBack();
+    }
+}
+
+- (void)dealloc {
+}
+
+@end
+
+@interface BubbleView () <CAAnimationDelegate>
 
 @end
 
 @implementation BubbleView
 
+- (void)dealloc {
+    
+}
+
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
         self.backgroundColor = [UIColor clearColor];
-        self.contentLabel = [[UILabel alloc] initWithFrame:(CGRect){{0, 0}, frame.size}];
         
     }
     return self;
@@ -30,7 +54,6 @@
     if (!animation) { return; }
     // 设定为缩放
     CABasicAnimation *basicAnimation = [CABasicAnimation animationWithKeyPath:@"transform.scale"];
-    
     // 动画选项设定
     basicAnimation.duration = 0.25; // 动画持续时间
     basicAnimation.repeatCount = 1; // 重复次数
@@ -43,21 +66,53 @@
 }
 
 - (void)showOverView:(UIView *)coveredView {
+    if (!CGPointEqualToPoint(self.archorPoint, CGPointZero)) {
+        CGFloat arrowPosition = (self.arrowPosition ? self.arrowPosition : 0.5);
+        CGFloat x = 0;
+        CGFloat y = 0;
+        switch (self.direction) {
+            case BubbleArrorDirectionUp:
+                x = self.archorPoint.x - CGRectGetWidth(self.frame) * arrowPosition;
+                y = self.archorPoint.y;
+                break;
+            case BubbleArrorDirectionDown:
+                x = self.archorPoint.x - CGRectGetWidth(self.frame) * arrowPosition;
+                y = self.archorPoint.y - self.frame.size.height;
+                break;
+            case BubbleArrorDirectionLeft:
+                x = self.archorPoint.x;
+                y = self.archorPoint.y - CGRectGetHeight(self.frame) * arrowPosition;
+                break;
+            default:
+                x = self.archorPoint.x - CGRectGetWidth(self.frame);
+                y = self.archorPoint.y - CGRectGetHeight(self.frame) * arrowPosition;
+                break;
+                break;
+        }
+        
+        self.frame = CGRectMake(x, y, self.frame.size.width, self.frame.size.height);
+    }
     [coveredView addSubview:self];
 }
 
 - (void)dismissAnimation:(BOOL)animation {
     if (!animation) {  return;  }
     CABasicAnimation *basicAnimation = [CABasicAnimation animationWithKeyPath:@"transform.scale"];
+    [basicAnimation setValue:@"dismissAnimation" forKey:@"AnimationKey"];
+    AnimationDelegate *delegate = [[AnimationDelegate alloc] init];
+    __weak typeof(self) weakSelf = self;
+    delegate.callBack = ^() {
+        [weakSelf dismiss];
+    };
+    basicAnimation.delegate = delegate;
     basicAnimation.duration = 0.25;
     basicAnimation.repeatCount = 1;
     basicAnimation.autoreverses = NO;
     basicAnimation.fromValue = [NSNumber numberWithFloat:1]; // 开始时的倍率
     basicAnimation.toValue = [NSNumber numberWithFloat:0]; // 结束时的倍率
+    basicAnimation.removedOnCompletion = NO;
+    basicAnimation.fillMode = kCAFillModeForwards;
     [self.layer addAnimation:basicAnimation forKey:@"scale-layer"];
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.25 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [self dismiss];
-    });
 }
 
 - (void)dismiss {
@@ -155,10 +210,10 @@
     
     CGContextAddLineToPoint(context, x, y+radius);
     CGContextAddArcToPoint(context, x, y, x+radius, y, radius);
-    
-    
-    CGContextFillPath(context); //渲染圆形
     CGContextClosePath(context);
+
+    CGContextFillPath(context); //渲染圆形
 }
 
 @end
+

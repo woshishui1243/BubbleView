@@ -1,5 +1,5 @@
 PODS:
-  - BubbleView (1.0)
+  - BubbleView (1.1.0)
 
 DEPENDENCIES:
   - BubbleView (from `../`)
@@ -9,7 +9,7 @@ EXTERNAL SOURCES:
     :path: ../
 
 SPEC CHECKSUMS:
-  BubbleView: 2042e393fd867446ce6796eadc633af90cb17778
+  BubbleView: 0596bdef2adffe5ac85068aa7390b08290e295a1
 
 PODFILE CHECKSUM: d4bc31f95a8937fb5433c96a4f9582c1ac61d58d
 

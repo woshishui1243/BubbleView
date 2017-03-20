@@ -23,6 +23,7 @@ typedef enum : NSUInteger {
 @property (nonatomic, assign) CGFloat radius;
 @property (nonatomic, assign) BubbleArrorDirection direction;
 @property (nonatomic, assign) CGFloat arrowPosition;
+@property (nonatomic, assign) CGPoint archorPoint;
 
 - (void)showOverView:(UIView *)coveredView animation:(BOOL)animation;
 
