@@ -18,6 +18,7 @@ typedef enum : NSUInteger {
 @interface BubbleView : UIView
 
 @property (nonatomic, assign) CGFloat arrowHeight;
+@property (nonatomic, assign) CGFloat arrowWidth;
 @property (nonatomic, strong) UIColor *fillColor;
 @property (nonatomic, assign) CGFloat radius;
 @property (nonatomic, assign) BubbleArrorDirection direction;

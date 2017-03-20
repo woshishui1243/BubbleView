@@ -49,6 +49,7 @@
     CGContextSaveGState(context); //保存上下文 1
     CGContextBeginPath(context);
     
+    CGFloat arrowWidth = self.arrowWidth ? self.arrowWidth : self.arrowHeight;
     switch (self.direction) {
         case BubbleArrorDirectionUp: {
             x = 0;
@@ -56,9 +57,9 @@
             height = CGRectGetHeight(rrect) - self.arrowHeight;
             width = CGRectGetWidth(rrect);
             CGFloat offsetX = (self.arrowPosition ? self.arrowPosition : 0.5) * width;
-            CGContextMoveToPoint(context, offsetX + self.arrowHeight, y);
+            CGContextMoveToPoint(context, offsetX + arrowWidth, y);
             CGContextAddLineToPoint(context, offsetX, y-self.arrowHeight);
-            CGContextAddLineToPoint(context, offsetX - self.arrowHeight, y);
+            CGContextAddLineToPoint(context, offsetX - arrowWidth, y);
         }
             break;
         case BubbleArrorDirectionDown: {
@@ -67,9 +68,9 @@
             height = CGRectGetHeight(rrect) - self.arrowHeight;
             width = CGRectGetWidth(rrect);
             CGFloat offsetX = (self.arrowPosition ? self.arrowPosition : 0.5) * width;
-            CGContextMoveToPoint(context, offsetX + self.arrowHeight, height);
+            CGContextMoveToPoint(context, offsetX + arrowWidth, height);
             CGContextAddLineToPoint(context, offsetX, height+self.arrowHeight);
-            CGContextAddLineToPoint(context, offsetX - self.arrowHeight, height);
+            CGContextAddLineToPoint(context, offsetX - arrowWidth, height);
         }
             break;
         case BubbleArrorDirectionLeft: {
@@ -78,9 +79,9 @@
             height = CGRectGetHeight(rrect);
             width = CGRectGetWidth(rrect)-self.arrowHeight;
             CGFloat offsetY = (self.arrowPosition ? self.arrowPosition : 0.5) * height;
-            CGContextMoveToPoint(context, x, offsetY+self.arrowHeight);
+            CGContextMoveToPoint(context, x, offsetY+arrowWidth);
             CGContextAddLineToPoint(context, CGRectGetMinX(rrect), offsetY);
-            CGContextAddLineToPoint(context, x, offsetY-self.arrowHeight);
+            CGContextAddLineToPoint(context, x, offsetY-arrowWidth);
         }
             break;
         default:  {
@@ -89,9 +90,9 @@
             height = CGRectGetHeight(rrect);
             width = CGRectGetWidth(rrect)-self.arrowHeight;
             CGFloat offsetY = (self.arrowPosition ? self.arrowPosition : 0.5) * height;
-            CGContextMoveToPoint(context, width, offsetY+self.arrowHeight);
+            CGContextMoveToPoint(context, width, offsetY+arrowWidth);
             CGContextAddLineToPoint(context, width+self.arrowHeight, offsetY);
-            CGContextAddLineToPoint(context, width, offsetY-self.arrowHeight);
+            CGContextAddLineToPoint(context, width, offsetY-arrowWidth);
         }
             break;
     }
