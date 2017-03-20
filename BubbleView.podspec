@@ -1,7 +1,7 @@
 
 Pod::Spec.new do |spec|
     spec.name            = 'BubbleView'
-    spec.version          = '1.1.0'
+    spec.version          = '1.2.0'
     spec.summary          = 'Custom BubbleView'
     spec.description      = <<-DESC
                             Custom BubbleView
